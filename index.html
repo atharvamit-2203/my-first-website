@@ -1,0 +1,47 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const welcomeOverlay = document.getElementById('welcomeOverlay');
+  const mainContent = document.getElementById('mainContent');
+  const nameInput = document.getElementById('nameInput');
+  const submitBtn = document.getElementById('submitName');
+  const userNameSpan = document.getElementById('userName');
+
+  // Focus on name input when page loads
+  nameInput.focus();
+
+  // Handle name submission
+  function handleSubmit() {
+      const name = nameInput.value.trim();
+      if (name) {
+          // Store name in localStorage for persistence
+          localStorage.setItem('userName', name);
+          
+          // Update greeting if it exists
+          if (userNameSpan) {
+              userNameSpan.textContent = name;
+          }
+          
+          // Hide overlay and show main content
+          welcomeOverlay.style.display = 'none';
+          mainContent.classList.add('active');
+      }
+  }
+
+  // Submit button click handler
+  submitBtn.addEventListener('click', handleSubmit);
+
+  // Enter key handler
+  nameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+          handleSubmit();
+      }
+  });
+
+  // Check if user name already exists
+  const savedName = localStorage.getItem('userName');
+  if (savedName) {
+      nameInput.value = savedName;
+      if (userNameSpan) {
+          userNameSpan.textContent = savedName;
+      }
+  }
+});

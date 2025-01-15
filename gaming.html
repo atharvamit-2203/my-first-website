@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matching Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .stat-box {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            grid-template-rows: repeat(3, 150px);
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 200px;
+            height: 150px;
+            background-color: #4caf50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .card:hover {
+            background-color: #45a049;
+        }
+
+        .card.flipped {
+            background-color: #fff;
+            color: black;
+        }
+
+        .card.matched {
+            background-color: #e8f5e9;
+            color: black;
+            cursor: default;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Word Search: Biology</h1>
+    <div class="stats">
+        <div class="stat-box">
+            Time: <span id="timer">00:00</span>
+        </div>
+        <div class="stat-box">
+            Points: <span id="points">0</span>
+        </div>
+    </div>
+    <div class="game-container">
+        <div class="board" id="board"></div>
+        <div class="controls">
+            <button id="startBtn">Start Game</button>
+            <button id="resetBtn" disabled>Reset Game</button>
+        </div>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const timerDisplay = document.getElementById('timer');
+        const pointsDisplay = document.getElementById('points');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const words = [
+            'Mitochondria', 'Evolution', 'Cell Division', 'Photosynthesis', 'DNA', 'Ecosystem'
+        ];
+        
+        const definitions = [
+            'The powerhouse of the cell responsible for producing energy.',
+            'Life\'s gradual change over time.',
+            'The process of dividing the parent cell into daughter cells.',
+            'Plants converting water, light, and CO2 into glucose and oxygen.',
+            'Genetic code for life\'s traits.',
+            'Complex network of organisms and their environment.'
+        ];
+
+        let cards = [];
+        let flippedCards = [];
+        let matchedCards = 0;
+        let lockBoard = false;
+        let gameStarted = false;
+        let timer = 0;
+        let timerInterval;
+        let points = 0;
+        let consecutiveMatches = 0;
+
+        function initializeGame() {
+            cards = [
+                ...words.map(word => ({ type: 'word', value: word })),
+                ...definitions.map(def => ({ type: 'definition', value: def }))
+            ];
+            cards.sort(() => 0.5 - Math.random());
+            
+            board.innerHTML = '';
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.setAttribute('data-id', index);
+                cardElement.setAttribute('data-type', card.type);
+                cardElement.setAttribute('data-value', card.value);
+                cardElement.addEventListener('click', flipCard);
+                board.appendChild(cardElement);
+            });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer++;
+                const minutes = Math.floor(timer / 60).toString().padStart(2, '0');
+                const seconds = (timer % 60).toString().padStart(2, '0');
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        function startGame() {
+            gameStarted = true;
+            startBtn.disabled = true;
+            resetBtn.disabled = false;
+            startTimer();
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            timer = 0;
+            points = 0;
+            matchedCards = 0;
+            consecutiveMatches = 0;
+            gameStarted = false;
+            lockBoard = false;
+            flippedCards = [];
+            
+            timerDisplay.textContent = '00:00';
+            pointsDisplay.textContent = '0';
+            
+            startBtn.disabled = false;
+            resetBtn.disabled = true;
+            
+            initializeGame();
+        }
+
+        function updatePoints(isMatch) {
+            if (isMatch) {
+                consecutiveMatches++;
+                // Bonus points for consecutive matches
+                const bonus = Math.min(consecutiveMatches - 1, 3) * 5;
+                points += 10 + bonus;
+            } else {
+                consecutiveMatches = 0;
+                points = Math.max(0, points - 2); // Penalty for wrong match
+            }
+            pointsDisplay.textContent = points;
+        }
+
+        function flipCard() {
+            if (!gameStarted) {
+                alert('Please click "Start Game" to begin!');
+                return;
+            }
+            
+            if (lockBoard || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+
+            this.classList.add('flipped');
+            this.textContent = this.getAttribute('data-value');
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            const value1 = card1.getAttribute('data-value');
+            const value2 = card2.getAttribute('data-value');
+            const type1 = card1.getAttribute('data-type');
+            const type2 = card2.getAttribute('data-type');
+
+            const isMatch = (type1 === 'word' && type2 === 'definition' && value1 === words[definitions.indexOf(value2)]) ||
+                          (type1 === 'definition' && type2 === 'word' && value2 === words[definitions.indexOf(value1)]);
+
+            if (isMatch) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedCards++;
+                updatePoints(true);
+
+                if (matchedCards === words.length) {
+                    clearInterval(timerInterval);
+                    const finalBonus = Math.max(0, 100 - timer); // Time bonus
+                    points += finalBonus;
+                    pointsDisplay.textContent = points;
+                    setTimeout(() => {
+                        alert(`Congratulations! You won!\nFinal Score: ${points} points\nTime: ${timerDisplay.textContent}`);
+                    }, 500);
+                }
+
+                flippedCards = [];
+                lockBoard = false;
+            } else {
+                lockBoard = true;
+                updatePoints(false);
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    card1.textContent = '';
+                    card2.textContent = '';
+                    flippedCards = [];
+                    lockBoard = false;
+                }, 1000);
+            }
+        }
+
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', resetGame);
+        
+        initializeGame();
+    </script>
+</body>
+</html>

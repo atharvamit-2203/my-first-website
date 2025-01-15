@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Subject Selector</title>
+  <style>
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatingCircles {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      padding: 20px;
+      line-height: 1.6;
+      background: linear-gradient(-45deg, #ffc1cc, #a3d8f4, #d4a5d8, #a8e6cf, #ffecd1);
+      background-size: 300% 300%;
+      animation: gradientAnimation 15s ease infinite;
+      color: #333;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .language-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #2980b9;
+      border-radius: 5px;
+      background-color: #ecf0f1;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .language-btn:hover {
+      background-color: #2980b9;
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      color: indigo;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #34495e;
+    }
+
+    select {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #2980b9;
+      border-radius: 5px;
+      background-color: #ecf0f1;
+      font-size: 1em;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .section {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Language Selection Modal -->
+  <div id="languageModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 id="selectLanguageText">Select Your Language / भाषा चुनें / भाषा निवडा</h2>
+      <button class="language-btn" onclick="setLanguage('en')">English</button>
+      <button class="language-btn" onclick="setLanguage('hi')">हिंदी</button>
+      <button class="language-btn" onclick="setLanguage('mr')">मराठी</button>
+      <button class="language-btn" onclick="setLanguage('ta')">தமிழ்</button>
+      <button class="language-btn" onclick="setLanguage('te')">తెలుగు</button>
+    </div>
+  </div>
+
+  <div class="circle one"></div>
+  <div class="circle two"></div>
+  <div class="circle three"></div>
+
+  <h1 id="pageTitle">Dynamic Subject Selector</h1>
+  
+  <div class="section">
+    <label for="board" id="boardLabel">Choose a Board:</label>
+    <select id="board" onchange="selectBoard()">
+      <option value="" disabled selected id="selectBoardOption">Select Board</option>
+      <option value="CBSE">CBSE</option>
+      <option value="ICSE">ICSE</option>
+      <option value="State Board">State Board</option>
+    </select>
+  </div>
+
+  <div class="section hidden" id="resourcesSection">
+    <label for="resource" id="resourceLabel">Choose a Resource:</label>
+    <select id="resource" onchange="selectResource()">
+      <option value="" disabled selected id="selectResourceOption">Select Resource</option>
+      <option value="Ncert Notes" id="ncertOption">Ncert Notes</option>
+      <option value="Lecture Notes" id="lectureOption">Lecture Notes</option>
+      <option value="Question Papers" id="questionOption">Question Papers</option>
+      <option value="Videos" id="videosOption">Videos</option>
+      <option value="Assignments" id="assignmentsOption">Assignments</option>
+    </select>
+  </div>
+
+  <div class="section hidden" id="subjectsSection">
+    <label for="subject" id="subjectLabel">Choose a Subject:</label>
+    <select id="subject" onchange="selectSubject()">
+      <option value="" disabled selected id="selectSubjectOption">Select Subject</option>
+    </select>
+  </div>
+
+  <div class="section hidden" id="chaptersSection">
+    <h3 id="chaptersTitle">Chapters:</h3>
+    <ul id="chaptersList"></ul>
+  </div>
+</body>
+<script>
+// Language translations
+const translations = {
+    en: {
+        pageTitle: "Dynamic Subject Selector",
+        boardLabel: "Choose a Board:",
+        selectBoard: "Select Board",
+        resourceLabel: "Choose a Resource:",
+        selectResource: "Select Resource",
+        subjectLabel: "Choose a Subject:",
+        selectSubject: "Select Subject",
+        chaptersTitle: "Chapters:",
+        ncertNotes: "Ncert Notes",
+        lectureNotes: "Lecture Notes",
+        questionPapers: "Question Papers",
+        videos: "Videos",
+        assignments: "Assignments"
+    },
+    hi: {
+        pageTitle: "विषय चयनकर्ता",
+        boardLabel: "बोर्ड चुनें:",
+        selectBoard: "बोर्ड चुनें",
+        resourceLabel: "संसाधन चुनें:",
+        selectResource: "संसाधन चुनें",
+        subjectLabel: "विषय चुनें:",
+        selectSubject: "विषय चुनें",
+        chaptersTitle: "अध्याय:",
+        ncertNotes: "एनसीईआरटी नोट्स",
+        lectureNotes: "व्याख्यान नोट्स",
+        questionPapers: "प्रश्न पत्र",
+        videos: "वीडियो",
+        assignments: "असाइनमेंट"
+    },
+    mr: {
+        pageTitle: "विषय निवडक",
+        boardLabel: "बोर्ड निवडा:",
+        selectBoard: "बोर्ड निवडा",
+        resourceLabel: "संसाधन निवडा:",
+        selectResource: "संसाधन निवडा",
+        subjectLabel: "विषय निवडा:",
+        selectSubject: "विषय निवडा",
+        chaptersTitle: "प्रकरणे:",
+        ncertNotes: "एनसीईआरटी नोट्स",
+        lectureNotes: "व्याख्यान नोट्स",
+        questionPapers: "प्रश्नपत्रिका",
+        videos: "व्हिडिओ",
+        assignments: "कार्यपत्रिका"
+    },
+    ta: {
+        pageTitle: "பாடம் தேர்வு",
+        boardLabel: "வாரியத்தைத் தேர்ந்தெடுக்கவும்:",
+        selectBoard: "வாரியத்தைத் தேர்ந்தெடுக்கவும்",
+        resourceLabel: "வளத்தைத் தேர்ந்தெடுக்கவும்:",
+        selectResource: "வளத்தைத் தேர்ந்தெடுக்கவும்",
+        subjectLabel: "பாடத்தைத் தேர்ந்தெடுக்கவும்:",
+        selectSubject: "பாடத்தைத் தேர்ந்தெடுக்கவும்",
+        chaptersTitle: "அத்தியாயங்கள்:",
+        ncertNotes: "என்சிஇஆர்டி குறிப்புகள்",
+        lectureNotes: "விரிவுரை குறிப்புகள்",
+        questionPapers: "வினாத்தாள்கள்",
+        videos: "காணொளிகள்",
+        assignments: "பயிற்சிகள்"
+    },
+    te: {
+        pageTitle: "విషయ ఎంపిక",
+        boardLabel: "బోర్డును ఎంచుకోండి:",
+        selectBoard: "బోర్డును ఎంచుకోండి",
+        resourceLabel: "వనరును ఎంచుకోండి:",
+        selectResource: "వనరును ఎంచుకోండి",
+        subjectLabel: "విషయాన్ని ఎంచుకోండి:",
+        selectSubject: "విషయాన్ని ఎంచుకోండి",
+        chaptersTitle: "అధ్యాయాలు:",
+        ncertNotes: "ఎన్సిఇఆర్టి నోట్స్",
+        lectureNotes: "ఉపన్యాస నోట్స్",
+        questionPapers: "ప్రశ్న పత్రాలు",
+        videos: "వీడియోలు",
+        assignments: "అసైన్మెంట్లు"
+    }
+};
+
+// Board data
+const boardData = {
+    CBSE: {
+        Mathematics: {
+            "Ncert Notes": [
+                { name: "Algebra Notes", link: "https://example.com/cbse/math/algebra_notes" },
+                { name: "Geometry Notes", link: "https://example.com/cbse/math/geometry_notes" }
+            ],
+            "Lecture Notes": [
+                { name: "Algebra Lecture Notes", link: "https://example.com/cbse/math/algebra_lecture_notes" },
+                { name: "Geometry Lecture Notes", link: "https://example.com/cbse/math/geometry_lecture_notes" }
+            ],
+            "Question Papers": [
+                { name: "Algebra Question Paper", link: "https://example.com/cbse/math/algebra_question_paper" },
+                { name: "Geometry Question Paper", link: "https://example.com/cbse/math/geometry_question_paper" }
+            ],
+            "Videos": [
+                { name: "Algebra Video", link: "https://example.com/cbse/math/algebra_video" },
+                { name: "Geometry Video", link: "https://example.com/cbse/math/geometry_video" }
+            ],
+            "Assignments": [
+                { name: "Arithmetic Progression", link: "integer.html" }
+            ]
+        },
+        Science: {
+            "Ncert Notes": [
+                { name: "Chemical Reactions and Equations", link: "./jesc101.pdf" },
+                { name: "Acids, Bases and Salts", link: "./jesc102.pdf" },
+                { name: "Metals and Non Metals", link: "./jesc103.pdf" },
+                { name: "Carbon and its Compounds", link: "./jesc104.pdf" }
+            ],
+            "Lecture Notes": [
+                { name: "Chemical Reactions Lecture", link: "lecture1.pdf" },
+                { name: "Acids and Bases Lecture", link: "lecture2.pdf" }
+            ],
+            "Question Papers": [
+                { name: "Science 2023", link: "science2023.pdf" },
+                { name: "Science 2022", link: "science2022.pdf" }
+            ],
+            "Videos": [
+                { name: "Chemical Reactions", link: "video1.mp4" },
+                { name: "Acids and Bases", link: "video2.mp4" }
+            ],
+            "Assignments": [
+                { name: "Chemical Reactions Assignment", link: "assignment1.pdf" },
+                { name: "Acids and Bases Assignment", link: "assignment2.pdf" }
+            ]
+        }
+    },
+    ICSE: {
+        Mathematics: {
+            "Ncert Notes": [
+                { name: "Algebra ICSE", link: "icse_algebra.pdf" },
+                { name: "Geometry ICSE", link: "icse_geometry.pdf" }
+            ],
+            "Lecture Notes": [],
+            "Question Papers": [],
+            "Videos": [],
+            "Assignments": []
+        },
+        Science: {
+            "Ncert Notes": [
+                { name: "Physics Chapter 1", link: "physics1.pdf" },
+                { name: "Chemistry Chapter 1", link: "chemistry1.pdf" }
+            ],
+            "Lecture Notes": [],
+            "Question Papers": [],
+            "Videos": [],
+            "Assignments": []
+        }
+    }
+};
+
+// Store current language
+let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+// Initialize page on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set initial language
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+        setLanguage(savedLanguage);
+        document.getElementById('langSelect').value = savedLanguage;
+    }
+    console.log('Page initialized with language:', currentLanguage);
+});
+
+// Set language and store preference
+function setLanguageAndStore(lang) {
+    setLanguage(lang);
+    localStorage.setItem('selectedLanguage', lang);
+    document.getElementById('langSelect').value = lang;
+    currentLanguage = lang;
+    console.log('Language set and stored:', lang);
+}
+
+// Set language function
+function setLanguage(lang) {
+    try {
+        const t = translations[lang];
+        if (!t) {
+            console.error('Translation not found for:', lang);
+            return;
+        }
+
+        // Update HTML lang attribute
+        document.documentElement.lang = lang;
+        
+        // Update all UI elements
+        const elements = {
+            'pageTitle': t.pageTitle,
+            'boardLabel': t.boardLabel,
+            'selectBoardOption': t.selectBoard,
+            'resourceLabel': t.resourceLabel,
+            'selectResourceOption': t.selectResource,
+            'subjectLabel': t.subjectLabel,
+            'selectSubjectOption': t.selectSubject,
+            'chaptersTitle': t.chaptersTitle,
+            'ncertOption': t.ncertNotes,
+            'lectureOption': t.lectureNotes,
+            'questionOption': t.questionPapers,
+            'videosOption': t.videos,
+            'assignmentsOption': t.assignments
+        };
+
+        // Update each element if it exists
+        for (const [id, text] of Object.entries(elements)) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = text;
+            }
+        }
+
+        // Hide language modal
+        const modal = document.getElementById('languageModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+
+        currentLanguage = lang;
+        
+    } catch (error) {
+        console.error('Error in setLanguage:', error);
+    }
+}
+
+// Get current language
+function getCurrentLanguage() {
+    return currentLanguage;
+}
+
+// Select board handler
+function selectBoard() {
+    document.getElementById("resourcesSection").classList.remove("hidden");
+    document.getElementById("subjectsSection").classList.add("hidden");
+    document.getElementById("chaptersSection").classList.add("hidden");
+}
+
+// Select resource handler
+function selectResource() {
+    const resource = document.getElementById("resource").value;
+    const board = document.getElementById("board").value;
+    const subjectsSection = document.getElementById("subjectsSection");
+    const subjectSelect = document.getElementById("subject");
+    
+    subjectSelect.innerHTML = `<option value="" disabled selected>${translations[currentLanguage].selectSubject}</option>`;
+    
+    const subjects = Object.keys(boardData[board]);
+    subjects.forEach(subject => {
+        const option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        subjectSelect.appendChild(option);
+    });
+    
+    subjectsSection.classList.remove("hidden");
+    document.getElementById("chaptersSection").classList.add("hidden");
+}
+
+// Select subject handler
+function selectSubject() {
+    const board = document.getElementById("board").value;
+    const resource = document.getElementById("resource").value;
+    const subject = document.getElementById("subject").value;
+    const chaptersSection = document.getElementById("chaptersSection");
+    const chaptersList = document.getElementById("chaptersList");
+    chaptersList.innerHTML = '';
+
+    const chapters = boardData[board][subject][resource];
+
+    if (chapters && chapters.length > 0) {
+        chapters.forEach(chapter => {
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = chapter.link;
+            link.textContent = chapter.name;
+            link.target = "_blank";
+            listItem.appendChild(link);
+            chaptersList.appendChild(listItem);
+        });
+        chaptersSection.classList.remove("hidden");
+    } else {
+        chaptersSection.classList.add("hidden");
+    }
+}  
+</script>
+</html>

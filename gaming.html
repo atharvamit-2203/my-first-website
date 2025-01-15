@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matching Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            text-align: center;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            grid-template-rows: repeat(3, 150px);
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 200px;
+            height: 150px;
+            background-color: #4caf50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .card.flipped {
+            background-color: #fff;
+            color: black;
+        }
+
+        .card.matched {
+            background-color: #fff;
+            color: black;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <h1>Word Search: Biology</h1>
+    <div class="game-container">
+        <div class="board" id="board"></div>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+
+        const words = [
+            'Mitochondria', 'Evolution', 'Cell Division', 'Photosynthesis', 'DNA', 'Ecosystem'
+        ];
+        
+        const definitions = [
+            'The powerhouse of the cell responsible for producing energy.',
+            'Life\'s gradual change over time.',
+            'The process of dividing the parent cell into daughter cells.',
+            'Plants converting water, light, and CO2 into glucose and oxygen.',
+            'Genetic code for life\'s traits.',
+            'Complex network of organisms and their environment.'
+        ];
+
+        const cards = [
+            ...words.map(word => ({ type: 'word', value: word })),
+            ...definitions.map(def => ({ type: 'definition', value: def }))
+        ];
+
+        let flippedCards = [];
+        let matchedCards = 0;
+        let lockBoard = false;
+
+        cards.sort(() => 0.5 - Math.random());
+
+        cards.forEach((card, index) => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.setAttribute('data-id', index);
+            cardElement.setAttribute('data-type', card.type);
+            cardElement.setAttribute('data-value', card.value);
+            cardElement.addEventListener('click', flipCard);
+            board.appendChild(cardElement);
+        });
+
+        function flipCard() {
+            if (lockBoard || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+
+            this.classList.add('flipped');
+            this.textContent = this.getAttribute('data-value');
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            const value1 = card1.getAttribute('data-value');
+            const value2 = card2.getAttribute('data-value');
+            const type1 = card1.getAttribute('data-type');
+            const type2 = card2.getAttribute('data-type');
+
+           
+            if (
+                (type1 === 'word' && type2 === 'definition' && value1 === definitions[words.indexOf(value2)]) ||
+                (type1 === 'definition' && type2 === 'word' && value2 === definitions[words.indexOf(value1)])
+            ) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedCards++;
+
+            
+                if (matchedCards === words.length) {
+                    setTimeout(() => alert("You win!"), 500);
+                }
+
+                flippedCards = [];
+                lockBoard = false; 
+            } else {
+                lockBoard = true;
+                setTimeout(() => {
+                  
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+                    lockBoard = false; 
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -4,304 +4,174 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #c6f6d5, #bee3f8);
-      overflow-y: auto;
-    }
-    
-    .dashboard {
-      padding: 20px;
-    }
-    
-    .dashboard-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    
-    .dashboard-header h1 {
-      font-size: 2.5rem;
-      color: #333;
-    }
-    
-    .dashboard-header p {
-      font-size: 1.2rem;
-      color: #555;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-    
-    .card-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .stat p {
-      font-size: 0.9rem;
-      color: #777;
-    }
-    
-    .stat h2 {
-      font-size: 1.5rem;
-      color: #333;
-    }
-    
-    .icon {
-      width: 30px;
-      height: 30px;
-      background-size: cover;
-    }
-    
-    .star {
-      background-image: url('path-to-star-icon');
-    }
-    
-    .book {
-      background-image: url('path-to-book-icon');
-    }
-    
-    .activity {
-      background-image: url('path-to-activity-icon');
-    }
-    
-    .award {
-      background-image: url('path-to-award-icon');
-    }
-    
-    .subject-progress {
-      margin-bottom: 30px;
-    }
-    
-    .subject-progress h2 {
-      margin-bottom: 10px;
-      font-size: 1.5rem;
-      color: #333;
-    }
-    
-    .progress-list .progress-item {
-      margin-bottom: 10px;
-    }
-    
-    .progress-bar {
-      background: #e2e8f0;
-      height: 8px;
-      border-radius: 4px;
-    }
-    
-    .progress-fill {
-      background: #48bb78;
-      height: 100%;
-      border-radius: 4px;
-    }
-    
-    .achievements-badges {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .recent-achievements ul,
-    .earned-badges ul {
-      list-style: none;
-      padding: 0;
-    }
-    
-    .recent-achievements li,
-    .earned-badges li {
-      background: #f9fafb;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .badge-icon {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
-    .home-button {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    padding: 15px 25px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.home-button:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-
-.home-icon {
-    font-size: 20px;
-}
-  </style>
 </head>
-<body>
-  <a href="index.html" class="home-button">
-    <i class="home-icon">🏠</i>
-    Home
-</a>
-  <div class="dashboard">
-    
-    <header class="dashboard-header">
-      <h1>Student Name's Dashboard</h1>
-      <p>Level 15 Scholar</p>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background: linear-gradient(135deg, #c6f6d5 0%, #bee3f8 100%); min-height: 100vh;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <!-- Header Section -->
+    <header style="text-align: center; margin-bottom: 40px; padding: 20px;">
+      <h1 style="font-size: 2.5rem; color: #1a202c; margin: 0 0 10px 0;">Student Name's Dashboard</h1>
+      <p style="font-size: 1.25rem; color: #4a5568; margin: 0;">Level 15 Scholar</p>
     </header>
 
-    <section class="stats-grid">
-      <div class="card">
-        <div class="card-content">
-          <div class="stat">
-            <p>Total Points</p>
-            <h2>2500</h2>
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
+      <!-- Total Points Card -->
+      <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <p style="color: #718096; margin: 0 0 5px 0;">Total Points</p>
+            <h2 style="font-size: 1.75rem; color: #2d3748; margin: 0;">2500</h2>
           </div>
-          <div class="icon star"></div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ecc94b;">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-content">
-          <div class="stat">
-            <p>Assignments</p>
-            <h2>45</h2>
+      <!-- Assignments Card -->
+      <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <p style="color: #718096; margin: 0 0 5px 0;">Assignments</p>
+            <h2 style="font-size: 1.75rem; color: #2d3748; margin: 0;">45</h2>
           </div>
-          <div class="icon book"></div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #4299e1;">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-content">
-          <div class="stat">
-            <p>Level</p>
-            <h2>15</h2>
+      <!-- Level Card -->
+      <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <p style="color: #718096; margin: 0 0 5px 0;">Level</p>
+            <h2 style="font-size: 1.75rem; color: #2d3748; margin: 0;">15</h2>
           </div>
-          <div class="icon activity"></div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #48bb78;">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-content">
-          <div class="stat">
-            <p>Badges</p>
-            <h2>3</h2>
+      <!-- Badges Card -->
+      <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <p style="color: #718096; margin: 0 0 5px 0;">Badges</p>
+            <h2 style="font-size: 1.75rem; color: #2d3748; margin: 0;">3</h2>
           </div>
-          <div class="icon award"></div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #9f7aea;">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- Subject Progress -->
-    <section class="subject-progress">
-      <h2>Subject Progress</h2>
-      <div class="progress-list">
-        <div class="progress-item">
-          <p>Mathematics</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
+    <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">
+      <h2 style="font-size: 1.5rem; color: #2d3748; margin: 0 0 20px 0;">Subject Progress</h2>
+      <div style="display: grid; gap: 15px;">
+        <!-- Mathematics -->
+        <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #4a5568;">Mathematics</span>
+            <span style="color: #4a5568;">75%</span>
+          </div>
+          <div style="background: #edf2f7; height: 8px; border-radius: 4px; overflow: hidden;">
+            <div style="background: #48bb78; width: 75%; height: 100%;"></div>
+          </div>
         </div>
-        <div class="progress-item">
-          <p>Science</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
-        </div>
-        <div class="progress-item">
-          <p>Social Science</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
-        </div>
-        <div class="progress-item">
-          <p>English</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
-        </div>
-        <div class="progress-item">
-          <p>Hindi</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 65%;"></div></div>
-        </div>
-        <div class="progress-item">
-          <p>Sanskrit</p>
-          <div class="progress-bar"><div class="progress-fill" style="width: 30%;"></div></div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Recent Achievements and Earned Badges -->
-    <section class="achievements-badges">
-      <div class="recent-achievements">
-        <h2>Recent Achievements</h2>
-        <ul>
-          <li>
-            <p>Chemical Reactions Quiz</p>
-            <span>100 Points</span>
-            <time>2024-01-08</time>
-          </li>
-          <li>
-            <p>Physics Assignment</p>
-            <span>150 Points</span>
-            <time>2024-01-07</time>
-          </li>
-          <li>
-            <p>Math Test</p>
-            <span>200 Points</span>
-            <time>2024-01-06</time>
-          </li>
-        </ul>
+        <!-- Science -->
+        <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #4a5568;">Science</span>
+            <span style="color: #4a5568;">60%</span>
+          </div>
+          <div style="background: #edf2f7; height: 8px; border-radius: 4px; overflow: hidden;">
+            <div style="background: #48bb78; width: 60%; height: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Other subjects following the same pattern -->
+        <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #4a5568;">English</span>
+            <span style="color: #4a5568;">80%</span>
+          </div>
+          <div style="background: #edf2f7; height: 8px; border-radius: 4px; overflow: hidden;">
+            <div style="background: #48bb78; width: 80%; height: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements and Badges Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+      <!-- Recent Achievements -->
+      <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="font-size: 1.5rem; color: #2d3748; margin: 0 0 20px 0;">Recent Achievements</h2>
+        <div style="display: grid; gap: 15px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <span style="color: #4a5568;">Chemical Reactions Quiz</span>
+            <span style="color: #48bb78; font-weight: bold;">100 Points</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <span style="color: #4a5568;">Physics Assignment</span>
+            <span style="color: #48bb78; font-weight: bold;">150 Points</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <span style="color: #4a5568;">Math Test</span>
+            <span style="color: #48bb78; font-weight: bold;">200 Points</span>
+          </div>
+        </div>
       </div>
 
-      <div class="earned-badges">
-        <h2>Earned Badges</h2>
-        <ul>
-          <li>
-            <div class="badge-icon book"></div>
+      <!-- Earned Badges -->
+      <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="font-size: 1.5rem; color: #2d3748; margin: 0 0 20px 0;">Earned Badges</h2>
+        <div style="display: grid; gap: 15px;">
+          <div style="display: flex; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #48bb78; margin-right: 12px;">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
             <div>
-              <p>Science Whiz</p>
-              <span>Completed all Science chapters</span>
+              <div style="font-weight: bold; color: #2d3748;">Science Whiz</div>
+              <div style="color: #718096; font-size: 0.875rem;">Completed all Science chapters</div>
             </div>
-          </li>
-          <li>
-            <div class="badge-icon target"></div>
+          </div>
+          <div style="display: flex; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #4299e1; margin-right: 12px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
             <div>
-              <p>Math Master</p>
-              <span>Solved 100 math problems</span>
+              <div style="font-weight: bold; color: #2d3748;">Math Master</div>
+              <div style="color: #718096; font-size: 0.875rem;">Solved 100 math problems</div>
             </div>
-          </li>
-          <li>
-            <div class="badge-icon trophy"></div>
+          </div>
+          <div style="display: flex; align-items: center; padding: 10px; background: #f7fafc; border-radius: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ecc94b; margin-right: 12px;">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5h3.5"></path>
+              <path d="M6 14h-2a2.5 2.5 0 0 0 0 5h3.5"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5h-3.5"></path>
+              <path d="M18 14h2a2.5 2.5 0 0 1 0 5h-3.5"></path>
+              <path d="M19 6v12"></path>
+              <path d="M5 6v12"></path>
+            </svg>
             <div>
-              <p>Perfect Score</p>
-              <span>100% on 3 assignments</span>
+              <div style="font-weight: bold; color: #2d3748;">Perfect Score</div>
+              <div style="color: #718096; font-size: 0.875rem;">100% on 3 assignments</div>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 </body>
 </html>

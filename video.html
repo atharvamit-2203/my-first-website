@@ -15,6 +15,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
         }
         #video-container { 
             position: relative; 
@@ -165,13 +166,41 @@
         .result-error {
             background: rgba(244, 67, 54, 0.3);
         }
+        .home-button {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    padding: 15px 25px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.home-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.home-icon {
+    font-size: 20px;
+}
     </style>
 </head>
 <body>
 
 <div id="video-container">
     <video id="myVideo" controls>
-        <source src="mariana.mp4" type="video/mp4">
+        <source src="mariana (2).mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <div id="quiz-overlay">

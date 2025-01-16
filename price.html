@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Details</title>
+  <style>
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 300% 300%;
+      animation: gradientAnimation 10s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+      overflow-y: auto;
+    }
+    .buttons {
+    display: flex;
+    gap: 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+    .pricing-container {
+      width: 90%;
+      max-width: 600px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .pricing-container h1 {
+      color: #34495e;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card {
+      margin: 15px 0;
+      padding: 20px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      background-color: #f7f9fa;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .pricing-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .pricing-card h2 {
+      margin: 0;
+      font-size: 1.5em;
+      color: #3498db;
+    }
+
+    .pricing-card p {
+      margin: 10px 0;
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+
+    .pricing-card span {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-card {
+        padding: 15px;
+      }
+    }
+    .home-button {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    padding: 15px 25px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.home-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.home-icon {
+    font-size: 20px;
+}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="home-button">
+    <i class="home-icon">🏠</i>
+    Home
+</a>
+  <div class="pricing-container">
+    <h1>Pricing Details</h1>
+
+    <div class="pricing-card">
+      <h2>NGOs</h2>
+      <p>Per person cost:</p>
+      <span>₹150-250</span>
+      <div class="buttons">
+        <a href="#">View Details</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h2>Basic</h2>
+      <p>Per person cost:</p>
+      <span>₹220</span>
+      <div class="buttons">
+        <a href="#">View Details</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h2>Advanced</h2>
+      <p>Per person cost:</p>
+      <span>₹350</span>
+      <div class="buttons">
+        <a href="#">View Details</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h2>Premium</h2>
+      <p>Per person cost:</p>
+      <span>₹400</span>
+      <div class="buttons">
+        <a href="#">View Details</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

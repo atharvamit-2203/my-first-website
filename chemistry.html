@@ -84,22 +84,42 @@
       font-size: 18px;
       font-weight: bold;
       border-radius: 8px;
-      cursor: grab;
+      cursor: pointer;
       text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .element:hover {
+      transform: scale(1.05);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .btn {
       padding: 10px 20px;
-      background-color: #4CAF50;
       color: white;
       border: none;
       cursor: pointer;
       font-size: 16px;
-      margin-top: 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-enter {
+      background-color: #4CAF50;
+    }
+
+    .btn-undo {
+      background-color: #f44336;
     }
 
     .btn:disabled {
       background-color: #ddd;
+      cursor: not-allowed;
     }
 
     .status {
@@ -123,7 +143,7 @@
 
 <div class="lab-container">
   <div class="beaker-container">
-    <div class="beaker" id="beaker1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="beaker" id="beaker1">
       <div class="reaction" id="reaction1"></div>
     </div>
     <p class="caption">Beaker 1</p>
@@ -132,7 +152,7 @@
   <div class="symbol">+</div>
 
   <div class="beaker-container">
-    <div class="beaker" id="beaker2" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="beaker" id="beaker2">
       <div class="reaction" id="reaction2"></div>
     </div>
     <p class="caption">Beaker 2</p>
@@ -158,23 +178,26 @@
 </div>
 
 <div class="elements">
-  <div class="element" draggable="true" data-element="Pb" data-color="gray" ondragstart="drag(event)">Pb</div>
-  <div class="element" draggable="true" data-element="CuCl2" data-color="green" ondragstart="drag(event)">CuCl₂</div>
-  <div class="element" draggable="true" data-element="KI" data-color="colorless" ondragstart="drag(event)">KI</div>
-  <div class="element" draggable="true" data-element="Zn" data-color="gray" ondragstart="drag(event)">Zn</div>
-  <div class="element" draggable="true" data-element="CuSO4" data-color="blue" ondragstart="drag(event)">CuSO₄</div>
-  <div class="element" draggable="true" data-element="NaOH" data-color="colorless" ondragstart="drag(event)">NaOH</div>
-  <div class="element" draggable="true" data-element="HCl" data-color="colorless" ondragstart="drag(event)">HCl</div>
-  <div class="element" draggable="true" data-element="Pb(NO3)2" data-color="colorless" ondragstart="drag(event)">Pb(NO₃)₂</div>
-  <div class="element" draggable="true" data-element="KCl" data-color="colorless" ondragstart="drag(event)">KCl</div>
-  <div class="element" draggable="true" data-element="AgNO3" data-color="colorless" ondragstart="drag(event)">AgNO₃</div>
-  <div class="element" draggable="true" data-element="Cl2" data-color="green" ondragstart="drag(event)">Cl₂</div>
-  <div class="element" draggable="true" data-element="KBr" data-color="colorless" ondragstart="drag(event)">KBr</div>
-  <div class="element" draggable="true" data-element="Na2SO4" data-color="colorless" ondragstart="drag(event)">Na₂SO₄</div>
-  <div class="element" draggable="true" data-element="BaCl2" data-color="colorless" ondragstart="drag(event)">BaCl₂</div>
+  <div class="element" data-element="Pb" data-color="gray">Pb</div>
+  <div class="element" data-element="CuCl2" data-color="green">CuCl₂</div>
+  <div class="element" data-element="KI" data-color="colorless">KI</div>
+  <div class="element" data-element="Zn" data-color="gray">Zn</div>
+  <div class="element" data-element="CuSO4" data-color="blue">CuSO₄</div>
+  <div class="element" data-element="NaOH" data-color="colorless">NaOH</div>
+  <div class="element" data-element="HCl" data-color="colorless">HCl</div>
+  <div class="element" data-element="Pb(NO3)2" data-color="colorless">Pb(NO₃)₂</div>
+  <div class="element" data-element="KCl" data-color="colorless">KCl</div>
+  <div class="element" data-element="AgNO3" data-color="colorless">AgNO₃</div>
+  <div class="element" data-element="Cl2" data-color="green">Cl₂</div>
+  <div class="element" data-element="KBr" data-color="colorless">KBr</div>
+  <div class="element" data-element="Na2SO4" data-color="colorless">Na₂SO₄</div>
+  <div class="element" data-element="BaCl2" data-color="colorless">BaCl₂</div>
 </div>
 
-<button class="btn" id="enterBtn" onclick="calculateReaction()">Enter</button>
+<div class="buttons">
+  <button class="btn btn-undo" id="undoBtn" onclick="undo()" disabled>Undo</button>
+  <button class="btn btn-enter" id="enterBtn" onclick="calculateReaction()">Enter</button>
+</div>
 
 <script>
 let reactants = [];
@@ -192,25 +215,36 @@ const timerInterval = setInterval(() => {
   }
 }, 1000);
 
-function allowDrop(event) {
-  event.preventDefault();
-}
+// Add click handlers to elements
+document.querySelectorAll(".element").forEach(element => {
+  element.addEventListener("click", () => {
+    if (reactants.length < 2) {
+      const element_name = element.dataset.element;
+      const color = element.dataset.color;
+      const beakerId = reactants.length === 0 ? "beaker1" : "beaker2";
+      const beaker = document.getElementById(beakerId);
+      
+      beaker.innerHTML = `<span>${element_name}</span>`;
+      beaker.style.backgroundColor = color;
+      reactants.push(element_name);
+      
+      // Enable undo button when there's at least one reactant
+      document.getElementById("undoBtn").disabled = false;
+    }
+  });
+});
 
-function drag(event) {
-  const element = event.target;
-  event.dataTransfer.setData("text", element.dataset.element);
-  event.dataTransfer.setData("color", element.dataset.color);
-}
-
-function drop(event) {
-  event.preventDefault();
-  const element = event.dataTransfer.getData("text");
-  const color = event.dataTransfer.getData("color");
-
-  if (reactants.length < 2) {
-    reactants.push(element);
-    event.target.innerHTML = `<span>${element}</span>`;
-    event.target.style.backgroundColor = color;
+function undo() {
+  if (reactants.length > 0) {
+    const beakerId = reactants.length === 1 ? "beaker1" : "beaker2";
+    const beaker = document.getElementById(beakerId);
+    
+    beaker.innerHTML = '<div class="reaction"></div>';
+    beaker.style.backgroundColor = "white";
+    reactants.pop();
+    
+    // Disable undo button if no reactants left
+    document.getElementById("undoBtn").disabled = reactants.length === 0;
   }
 }
 
@@ -244,11 +278,13 @@ function calculateReaction() {
     alert("No reaction!");
   }
 
+  // Reset beakers
   reactants = [];
-  document.getElementById("beaker1").innerHTML = "";
-  document.getElementById("beaker2").innerHTML = "";
+  document.getElementById("beaker1").innerHTML = '<div class="reaction"></div>';
+  document.getElementById("beaker2").innerHTML = '<div class="reaction"></div>';
   document.getElementById("beaker1").style.backgroundColor = "white";
   document.getElementById("beaker2").style.backgroundColor = "white";
+  document.getElementById("undoBtn").disabled = true;
 }
 
 function endGame() {
